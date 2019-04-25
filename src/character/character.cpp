@@ -81,29 +81,25 @@ namespace ORPG {
     * 
     * both are chars to reduce memory usage
     */
-    Skill::Skill(void) {
-        this->mod = 0;
-        this->prof = 0;
-    }
     Skill::Skill(char nb, unsigned char np) {
         this->mod = nb;
-        this->prof = np;
+        this->profBonus = np;
     }
     void Skill::set(char nb, unsigned char np) {
         this->mod = nb;
-        this->prof = np;
+        this->profBonus = np;
     }
     void Skill::setMod(char nb) {
         this->mod = nb;
     }
-    void Skill::setProf(unsigned char np) {
-        this->prof = np;
+    void Skill::setProfBonus(unsigned char np) {
+        this->profBonus = np;
     }
     char Skill::getMod(void) {
         return this->mod;
     }
-    unsigned char Skill::getProf(void) {
-        return this->prof;
+    unsigned char Skill::getProfBonus(void) {
+        return this->profBonus;
     }
 
     Skills::Skills(void) {

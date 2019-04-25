@@ -46,10 +46,6 @@ namespace ORPG {
             firstName = ng.make_first();
         lastName = ng.make_last();
 
-        Initialize();
-    }
-
-    void Human::Initialize() {
         curr_hp = 10;                   // TODO current hit points
         temp_hp = 0;                    // TODO temporary hit points
         max_hp = curr_hp;               // TODO maximum hit points
@@ -80,12 +76,9 @@ namespace ORPG {
         NameGenerator ng(race);
 
         if(firstName.empty())
+            firstName = ng.make_first();
         lastName = ng.make_last();
 
-        Initialize();
-    }
-
-    void Dwarf::Initialize() {
         curr_hp = 10;                   // TODO current hit points
         temp_hp = 0;                    // TODO temporary hit points
         max_hp = curr_hp;               // TODO maximum hit points
@@ -104,12 +97,6 @@ namespace ORPG {
         abils.INT = ab.INT;     // Intelligence
         abils.WIS = ab.WIS + 1; // Wisdom
         abils.CHA = ab.CHA;     // Charisma
-
-        // TODO Gender??? What about asexual races? What if they want to enter a name?
-        NameGenerator ng(race);
-
-        firstName = ng.make_first();
-        lastName = ng.make_last();
 
         firstName = name;
 
@@ -156,12 +143,6 @@ namespace ORPG {
         abils.INT = ab.INT + 1; // Intelligence
         abils.WIS = ab.WIS;     // Wisdom
         abils.CHA = ab.CHA;     // Charisma
-
-        // TODO Gender??? What about asexual races? What if they want to enter a name?
-        NameGenerator ng(race);
-
-        firstName = ng.make_first();
-        lastName = ng.make_last();
 
         firstName = name;
 

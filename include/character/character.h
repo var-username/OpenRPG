@@ -94,8 +94,7 @@ namespace ORPG {
 
 	class Skill {
 		public:
-			Skill();
-			Skill(char modifier, unsigned char proficiencyBonus);
+			Skill(char modifier = 0, unsigned char proficiencyBonus = 0);
 			~Skill();
 			void set(char newMod, unsigned char newProficiencyBonus);
 			void setMod(char newMod);
