@@ -19,9 +19,7 @@ namespace ORPG {
         void Initialize();
 
     public:
-        Human();
-        Human(Ability ab);
-        Human(Ability ab, std::string name);
+        Human(Ability ab = ability_struct(), std::string name = "");
 
         static const int ID = 0x0001;
         static const std::string race;
@@ -35,9 +33,7 @@ namespace ORPG {
         void Initialize();
 
     public:
-        Dwarf();
-        Dwarf(Ability ab);
-        Dwarf(Ability ab, std::string name);
+        Dwarf(Ability ab = ability_struct(), string name = "");
 
         static const int ID = 0x0010;
         static const std::string race;
@@ -47,9 +43,7 @@ namespace ORPG {
     private:
         typedef Dwarf super;
     public:
-        HillDwarf();
-        HillDwarf(Ability ab);
-        HillDwarf(Ability ab, std::string name);
+        HillDwarf(Ability ab = ability_struct(), string name = "");
 
         static const int ID = 0x0011;
     };
@@ -59,9 +53,7 @@ namespace ORPG {
         void Initialize();
 
     public:
-        Elf();
-        Elf(Ability ab);
-        Elf(Ability ab, std::string name);
+        Elf(Ability ab = ability_struct(), string name = "");
 
         static const int ID = 0x0020;
         static const std::string race;
@@ -69,9 +61,7 @@ namespace ORPG {
 
     class HighElf : public Elf {
     public:
-        HighElf();
-        HighElf(Ability ab);
-        HighElf(Ability ab, std::string name);
+        HighElf(Ability ab = ability_struct(), string name = "");
 
         static const int ID = 0x0021;
     };

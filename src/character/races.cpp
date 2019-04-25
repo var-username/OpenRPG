@@ -19,40 +19,6 @@ using namespace ORPG;
 namespace ORPG {
     const string Human::race = "Human";
 
-    Human::Human() {
-        abils.STR = gen_stat() + 1;    // Strength
-        abils.DEX = gen_stat() + 1;    // Dexterity
-        abils.CON = gen_stat() + 1;    // Constitution
-        abils.INT = gen_stat() + 1;    // Intelligence
-        abils.WIS = gen_stat() + 1;    // Wisdom
-        abils.CHA = gen_stat() + 1;    // Charisma
-
-        // TODO Gender??? What about asexual races? What if they want to enter a name?
-        NameGenerator ng(race);
-
-        firstName = ng.make_first();
-        lastName = ng.make_last();
-
-        Initialize();
-    }
-
-    Human::Human(Ability ab) {
-        abils.STR = ab.STR + 1;    // Strength
-        abils.DEX = ab.DEX + 1;    // Dexterity
-        abils.CON = ab.CON + 1;    // Constitution
-        abils.INT = ab.INT + 1;    // Intelligence
-        abils.WIS = ab.WIS + 1;    // Wisdom
-        abils.CHA = ab.CHA + 1;    // Charisma
-
-        // TODO Gender??? What about asexual races? What if they want to enter a name?
-        NameGenerator ng(race);
-
-        firstName = ng.make_first();
-        lastName = ng.make_last();
-
-        Initialize();
-    }
-
     Human::Human(Ability ab, string name) {
         abils.STR = ab.STR + 1;    // Strength
         abils.DEX = ab.DEX + 1;    // Dexterity
@@ -85,28 +51,6 @@ namespace ORPG {
 
     const string Dwarf::race = "Dwarf";
 
-    Dwarf::Dwarf() {
-        abils.STR = gen_stat();     // Strength
-        abils.DEX = gen_stat();     // Dexterity
-        abils.CON = gen_stat() + 2; // Constitution
-        abils.INT = gen_stat();     // Intelligence
-        abils.WIS = gen_stat();     // Wisdom
-        abils.CHA = gen_stat();     // Charisma
-
-        Initialize();
-    }
-
-    Dwarf::Dwarf(Ability ab) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX;     // Dexterity
-        abils.CON = ab.CON + 2; // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
-
-        Initialize();
-    }
-
     Dwarf::Dwarf(Ability ab, string name) {
         abils.STR = ab.STR;     // Strength
         abils.DEX = ab.DEX;     // Dexterity
@@ -138,30 +82,6 @@ namespace ORPG {
         Character::Initialize();
     }
 
-    HillDwarf::HillDwarf() {
-        abils.STR = gen_stat();     // Strength
-        abils.DEX = gen_stat();     // Dexterity
-        abils.CON = gen_stat() + 2; // Constitution
-        abils.INT = gen_stat();     // Intelligence
-        abils.WIS = gen_stat() + 1; // Wisdom
-        abils.CHA = gen_stat();     // Charisma
-
-        // TODO Gender??? What about asexual races? What if they want to enter a name?
-
-        Initialize();
-    }
-
-    HillDwarf::HillDwarf(Ability ab) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX;     // Dexterity
-        abils.CON = ab.CON + 2; // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS + 1; // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
-
-        Initialize();
-    }
-
     HillDwarf::HillDwarf(Ability ab, string name) {
         abils.STR = ab.STR;     // Strength
         abils.DEX = ab.DEX;     // Dexterity
@@ -177,40 +97,6 @@ namespace ORPG {
 
     const string Elf::race = "Elf";
 
-    Elf::Elf() {
-        abils.STR = gen_stat();     // Strength
-        abils.DEX = gen_stat() + 2; // Dexterity
-        abils.CON = gen_stat();     // Constitution
-        abils.INT = gen_stat();     // Intelligence
-        abils.WIS = gen_stat();     // Wisdom
-        abils.CHA = gen_stat();     // Charisma
-
-        // TODO Gender??? What about asexual races? What if they want to enter a name?
-        NameGenerator ng(race);
-
-        firstName = ng.make_first();
-        lastName = ng.make_last();
-
-        Initialize();
-    }
-
-    Elf::Elf(Ability ab) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX + 2; // Dexterity
-        abils.CON = ab.CON;     // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
-
-        // TODO Gender??? What about asexual races? What if they want to enter a name?
-        NameGenerator ng(race);
-
-        firstName = ng.make_first();
-        lastName = ng.make_last();
-
-        Initialize();
-    }
-
     Elf::Elf(Ability ab, string name) {
         abils.STR = ab.STR;     // Strength
         abils.DEX = ab.DEX + 2; // Dexterity
@@ -219,19 +105,16 @@ namespace ORPG {
         abils.WIS = ab.WIS;     // Wisdom
         abils.CHA = ab.CHA;     // Charisma
 
-        // TODO Gender??? What about asexual races? What if they want to enter a name?
-        NameGenerator ng(race);
-
-        firstName = ng.make_first();
-        lastName = ng.make_last();
-
+        firstName = name;
+        
         Initialize();
     }
 
     void Elf::Initialize() {
         NameGenerator ng(race);
 
-        firstName = ng.make_first();
+        if(firstName.empty())
+            firstName = ng.make_first();
         lastName = ng.make_last();
 
         curr_hp = 10;                   // TODO current hit points
@@ -245,40 +128,6 @@ namespace ORPG {
         Character::Initialize();
     }
 
-    HighElf::HighElf() {
-        abils.STR = gen_stat();     // Strength
-        abils.DEX = gen_stat() + 2; // Dexterity
-        abils.CON = gen_stat();     // Constitution
-        abils.INT = gen_stat() + 1; // Intelligence
-        abils.WIS = gen_stat();     // Wisdom
-        abils.CHA = gen_stat();     // Charisma
-
-        // TODO Gender??? What about asexual races? What if they want to enter a name?
-        NameGenerator ng(race);
-
-        firstName = ng.make_first();
-        lastName = ng.make_last();
-
-        Initialize();
-    }
-
-    HighElf::HighElf(Ability ab) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX + 2; // Dexterity
-        abils.CON = ab.CON;     // Constitution
-        abils.INT = ab.INT + 1; // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
-
-        // TODO Gender??? What about asexual races? What if they want to enter a name?
-        NameGenerator ng(race);
-
-        firstName = ng.make_first();
-        lastName = ng.make_last();
-
-        Initialize();
-    }
-
     HighElf::HighElf(Ability ab, string name) {
         abils.STR = ab.STR;     // Strength
         abils.DEX = ab.DEX + 2; // Dexterity
@@ -288,6 +137,8 @@ namespace ORPG {
         abils.CHA = ab.CHA;     // Charisma
 
         // TODO parse and set the name here, generating any missing pieces
+
+        firstName = name;
 
         Initialize();
     }
