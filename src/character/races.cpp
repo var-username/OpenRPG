@@ -29,13 +29,15 @@ namespace ORPG {
 
         // TODO parse and set the name here, generating any missing pieces
 
+        firstName = name;
+
         Initialize();
     }
 
     void Human::Initialize() {
         NameGenerator ng(race);
-
-        firstName = ng.make_first();
+        if (firstName.empty())
+            firstName = ng.make_first();
         lastName = ng.make_last();
 
         curr_hp = 10;                   // TODO current hit points
@@ -61,6 +63,8 @@ namespace ORPG {
 
         // TODO parse and set the name here, generating any missing pieces
 
+        firstName = name;
+
         Initialize();
     }
 
@@ -68,7 +72,8 @@ namespace ORPG {
         // TODO parse and set the name here, generating any missing pieces
         NameGenerator ng(race);
 
-        firstName = ng.make_first();
+        if(firstName.empty())
+            firstName = ng.make_first();
         lastName = ng.make_last();
 
         curr_hp = 10;                   // TODO current hit points
@@ -91,6 +96,8 @@ namespace ORPG {
         abils.CHA = ab.CHA;     // Charisma
 
         // TODO parse and set the name here, generating any missing pieces
+
+        firstName = name;
 
         Initialize();
     }
@@ -197,27 +204,28 @@ namespace ORPG {
     }
 
     // TODO Combine these three functions??
+    /*
     Character* CharacterFactory::NewCharacter(Ability ab) {
         switch(current->raceID) {
         case Human::ID : {
             return new Human(ab);
-        }
+        } break;
             
         case Dwarf::ID : {
             return new Dwarf(ab);
-        }
+        } break;
     
         case HillDwarf::ID : {
             return new HillDwarf(ab);
-        }
+        } break;
             
         case Elf::ID : {
             return new Elf(ab);
-        }
+        } break;
             
         case HighElf::ID : {
             return new HighElf(ab);
-        }
+        } break;
         default: {
             return NULL;
         }
@@ -228,7 +236,7 @@ namespace ORPG {
         switch(identifier) {
         case Human::ID : {
             return new Human;
-        }
+        } break;
             
         case Dwarf::ID : {
             return new Dwarf;
@@ -255,23 +263,24 @@ namespace ORPG {
         switch(identifier) {
         case Human::ID : {
             return new Human(ab);
-        }
+        } break;
             
         case Dwarf::ID : {
             return new Dwarf(ab);
-        }
+        } break;
         
         case HillDwarf::ID : {
             return new HillDwarf(ab);
-        }
+        } break;
             
         case Elf::ID : {
             return new Elf(ab);
-        }
+        } break;
             
         case HighElf::ID : {
             return new HighElf(ab);
-        }
+        } break;
+
         default: {
             return NULL;
         }
@@ -282,23 +291,56 @@ namespace ORPG {
         switch(current->raceID) {
         case Human::ID : {
             return new Human(ab, name);
-        }
+        } break;
             
         case Dwarf::ID : {
             return new Dwarf(ab, name);
-        }
+        } break;
     
         case HillDwarf::ID : {
             return new HillDwarf(ab, name);
-        }
+        } break;
             
         case Elf::ID : {
             return new Elf(ab, name);
-        }
+        } break;
             
         case HighElf::ID : {
             return new HighElf(ab, name);
+        } break;
+
+        default: {
+            return NULL;
         }
+        }
+    }
+    */
+
+    Character* CharacterFactory::NewCharacter(Ability ab, string name, int identifier) {
+        if (identifier == -1)
+            identifier = current->raceID;
+
+        switch(identifier) {
+        case Human::ID : {
+            return new Human(ab, name);
+        } break;
+            
+        case Dwarf::ID : {
+            return new Dwarf(ab, name);
+        } break;
+    
+        case HillDwarf::ID : {
+            return new HillDwarf(ab, name);
+        } break;
+            
+        case Elf::ID : {
+            return new Elf(ab, name);
+        } break;
+            
+        case HighElf::ID : {
+            return new HighElf(ab, name);
+        } break;
+
         default: {
             return NULL;
         }
@@ -312,23 +354,19 @@ namespace ORPG {
             switch(node->raceID) {
             case Human::ID : {
                 ret.push_back("Human");
-                break;
-            }
+            } break;
 
             case Dwarf::ID : {
                 ret.push_back("Dwarf");
-                break;
-            }
+            } break;
     
             case HillDwarf::ID : {
                 ret.push_back("Hill Dwarf");
-                break;
-            }
+            } break;
         
             case Elf::ID : {
-                ret.push_back("Elf");
-                break;
-            }
+                ret.push_back("Elf");  
+            } break;
         
             case HighElf::ID : {
                 ret.push_back("High Elf");
