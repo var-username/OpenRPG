@@ -85,12 +85,6 @@ namespace ORPG {
         CharacterFactory();
         ~CharacterFactory();
 
-        /*
-        Character* NewCharacter(Ability ab = ability_struct());
-        Character* NewCharacter(int identifier);
-        Character* NewCharacter(int identifier, Ability ab);
-        Character* NewCharacter(Ability ab,std::string name);
-        */
         Character* NewCharacter(Ability ab = ability_struct(), std::string name = "", int identifier = -1);
 
         void reset() { current = head; };
