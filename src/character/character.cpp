@@ -41,8 +41,8 @@ namespace ORPG {
                         "\t-V --version                Print version info\n"
                 "\n"
                 "Long options may not be passed with a single dash.\n"
-                "OpenRPG home page: < https://www.openrpg.io >\n"
-                "Report bugs to: < https://github.com/incomingstick/OpenRPG/issues >\n"
+                "Report bugs to: <https://github.com/incomingstick/OpenRPG/issues>\n"
+                "OpenRPG home page: <https://github.com/incomingstick/OpenRPG/issues>\n"
                 "See 'man character-generator' for more information [TODO add man pages].\n",
                 stdout);
             exit(EXIT_SUCCESS);
@@ -68,8 +68,8 @@ namespace ORPG {
                         "\t-V --version                Print version info\n"
                 "\n"
                 "Long options may not be passed with a single dash.\n"
-                "OpenRPG home page: < https://www.openrpg.io >\n"
-                "Report bugs to: < https://github.com/incomingstick/OpenRPG/issues >\n"
+                "Report bugs to: <https://github.com/incomingstick/OpenRPG/issues>\n"
+                "OpenRPG home page: <https://github.com/incomingstick/OpenRPG/issues>\n"
                 "See 'man character-generator' for more information [TODO add man pages].\n",
                 stdout);
         }
@@ -81,35 +81,35 @@ namespace ORPG {
     * 
     * both are chars to reduce memory usage
     */
-    Skill::Skill() {
+    Skill::Skill(void) {
         this->mod = 0;
-        this->profBonus = 0;
+        this->prof = 0;
     }
-    Skill::Skill(char modifier, unsigned char proficiencyBonus) {
-        this->mod = modifier;
-        this->profBonus = proficiencyBonus;
+    Skill::Skill(char nb, unsigned char np) {
+        this->mod = nb;
+        this->prof = np;
     }
-    void Skill::set(char modifier, unsigned char proficiencyBonus) {
-        this->mod = modifier;
-        this->profBonus = proficiencyBonus;
+    void Skill::set(char nb, unsigned char np) {
+        this->mod = nb;
+        this->prof = np;
     }
-    void Skill::setMod(char modifier) {
-        this->mod = modifier;
+    void Skill::setMod(char nb) {
+        this->mod = nb;
     }
-    void Skill::setProfBonus(unsigned char modifier) {
-        this->profBonus = modifier;
+    void Skill::setProf(unsigned char np) {
+        this->prof = np;
     }
-    char Skill::getMod() {
+    char Skill::getMod(void) {
         return this->mod;
     }
-    unsigned char Skill::getProfBonus() {
-        return this->profBonus;
+    unsigned char Skill::getProf(void) {
+        return this->prof;
     }
 
-    Skills::Skills() {
-        // empty
+    Skills::Skills(void) {
+        
     }
-    Skills::~Skills() {
+    Skills::~Skills(void) {
         delete[] &skillsMap;
     }
     Skill* Skills::get(EnumSkill skill) {
@@ -160,8 +160,8 @@ namespace ORPG {
     string Character::to_string() {
         string ret("");
 
-        ret += "~~~ " + (firstName.empty() || firstName == "NULL" ? "" : firstName);
-        ret += " " + (lastName.empty() || lastName == "NULL" ? "" : lastName);
+        ret += "~~~ " + firstName.empty() ? "" : firstName;
+        ret += " " + lastName.empty() ? "" : lastName;
         ret += " ~~~\n";
 
         ret += "STR: "+ std::to_string(STR()) + " (" + std::to_string(STR_MOD()) + ")\n";
@@ -244,79 +244,77 @@ namespace ORPG {
         * source code, as well as allowing for people to create their own styles with our predefined tags
         */
         
-    ret += "                         ╭────────────────────────────────────────────────────╮\n";
-    ret += " ────────────────────────┤                                                    │\n";
-    ret += " \\" + charFName +      "│Class & Level     Background      Player Name       │\n";
-    ret += "  \\"+ charLName +      "│                                                    │\n";
-    ret += "_ ───────────────────────┤                                                    │\n";
-    ret += "__\\  Character Name      │Race              Alignment       Experience Points │\n";
-    ret += "                         ╰────────────────────────────────────────────────────╯\n";
-    ret += "╭───╮╭─────────────────────────────────────────────────────────────────────────\n";
-    ret += "│STR││╭───┬─────────────────╮╭───────────────────────╮╭───────────────────────╮\n";
-    ret += "│"+sSTR+"│││   │   Inspiration   ││  ╭───╮  ╭────╮  ╭───╮ ││╭─────────────────────╮│\n";
-    ret += "├───┤│╰───┴─────────────────╯│  │   │  │    │  │   │ │││                     ││\n";
-    ret += "│"+sSTRMod+"││                       │  ├───┤  ├────┤  ├───┤ │││                     ││\n";
-    ret += "╰───╯│╭───┬─────────────────╮│  │ AC│  │Init│  │SPD│ │││                     ││\n";
-    ret += "     ││   │   Proficiency   ││  ╰───╯  ╰────╯  ╰───╯ │││                     ││\n";
-    ret += "╭───╮│╰───┴─────────────────╯│                       │││                     ││\n";
-    ret += "│DEX││                       │  ╭──────────────────╮ │││  Personality Traits ││\n";
-    ret += "│"+sDEX+"││╭─┬───┬───────────────╮│  │                  │ ││├─────────────────────┤│\n";
-    ret += "├───┤││ │   │      STR      ││  │                  │ │││                     ││\n";
-    ret += "│"+sDEXMod+"│││ │   │      DEX      ││  │     Curr. HP     │ │││                     ││\n";
-    ret += "╰───╯││ │   │      CON      ││  ├──────────────────┤ │││        Ideals       ││\n";
-    ret += "     ││ │   │      INT      ││  │                  │ ││├─────────────────────┤│\n";
-    ret += "╭───╮││ │   │      WIS      ││  │     Temp. HP     │ │││                     ││\n";
-    ret += "│CON│││ │   │      CHA      ││  ╰──────────────────╯ │││                     ││\n";
-    ret += "│"+sCON+"││├─┴───┴───────────────┤│                       │││        Bonds        ││\n";
-    ret += "├───┤││    Saving throws    ││ ╭────────╮ ╭────────╮ ││├─────────────────────┤│\n";
-    ret += "│"+sCONMod+"││╰─────────────────────╯│ │        │ │S O-O-O │ │││                     ││\n";
-    ret += "╰───╯│                       │ ├────────┤ │F O-O-O │ │││                     ││\n";
-    ret += "     │╭─┬───┬───────────────╮│ │Hit Dice│ │ Saves  │ │││        Flaws        ││\n";
-    ret += "╭───╮││ │"+sACR+"│Acrobatics     ││ ╰────────╯ ╰────────╯ ││╰─────────────────────╯│\n";
-    ret += "│INT│││ │"+sANM+"│Animal Handling│╰───────────────────────╯╰───────────────────────╯\n";
-    ret += "│"+sINT+"│││ │"+sARC+"│Arcana         │╭────────┬─────┬────────╮╭───────────────────────╮\n";
-    ret += "├───┤││ │"+sATH+"│Athletics      ││Name    │ ATK │DMG Type││                       │\n";
-    ret += "│"+sINTMod+"│││ │"+sDEC+"│Deception      ││        │     │        ││                       │\n";
-    ret += "╰───╯││ │"+sHIS+"│History        ││        │     │        ││                       │\n";
-    ret += "     ││ │"+sINS+"│Insight        ││        │     │        ││                       │\n";
-    ret += "╭───╮││ │"+sITM+"│Intimidation   │├────────┴─────┴────────┤│                       │\n";
-    ret += "│WIS│││ │"+sINV+"│Investigation  ││                       ││                       │\n";
-    ret += "│"+sWIS+"│││ │"+sWISMod+"│Medicine       ││                       ││                       │\n";
-    ret += "├───┤││ │"+sNAT+"│Nature         ││                       ││                       │\n";
-    ret += "│"+sWISMod+"│││ │"+sPRC+"│Perception     ││                       ││                       │\n";
-    ret += "╰───╯││ │"+sPRF+"│Performance    ││                       ││                       │\n";
-    ret += "     ││ │"+sPRS+"│Persuassion    ││                       ││                       │\n";
-    ret += "╭───╮││ │"+sREL+"│Religion       ││                       ││                       │\n";
-    ret += "│CHA│││ │"+sSLE+"│Sleight of Hand││                       ││                       │\n";
-    ret += "│"+sCHA+"│││ │"+sSTL+"│Stealth        ││                       ││                       │\n";
-    ret += "├───┤││ │"+sSUR+"│Survival       ││                       ││                       │\n";
-    ret += "│"+sCHAMod+"││├─┴───┴───────────────┤├───────────────────────┤│                       │\n";
-    ret += "╰───╯││       Skills        ││  Attacks and Spells   ││                       │\n";
-    ret += "─────╯╰─────────────────────╯╰───────────────────────╯│                       │\n";
-    ret += "╭───┬───────────────────────╮╭──┬────┬───────────────╮│                       │\n";
-    ret += "│   │     Passive Wisdom    ││CP│    │               ││                       │\n";
-    ret += "╰───┴───────────────────────╯│SP│    │               ││                       │\n";
-    ret += "╭───────────────────────────╮│EP│    │               ││                       │\n";
-    ret += "│                           ││GP│    │               ││                       │\n";
-    ret += "│                           ││PP│    │               ││                       │\n";
-    ret += "│                           │├──┴────╯               ││                       │\n";
-    ret += "│                           ││                       ││                       │\n";
-    ret += "│                           ││                       ││                       │\n";
-    ret += "│                           ││                       ││                       │\n";
-    ret += "│                           ││                       ││                       │\n";
-    ret += "├───────────────────────────┤├───────────────────────┤├───────────────────────┤\n";
-    ret += "│    Other Proficiencies    ││       Equipment       ││  Features and Traits  │\n";
-    ret += "╰───────────────────────────╯╰───────────────────────╯╰───────────────────────╯\n";
+        ret += "                         ╭────────────────────────────────────────────────────╮\n";
+        ret += " ────────────────────────┤                                                    │\n";
+        ret += " \\" + charFName +      "│Class & Level     Background      Player Name       │\n";
+        ret += "  \\"+ charLName +      "│                                                    │\n";
+        ret += "_ ───────────────────────┤                                                    │\n";
+        ret += "__\\  Character Name      │Race              Alignment       Experience Points │\n";
+        ret += "                         ╰────────────────────────────────────────────────────╯\n";
+        ret += "╭───╮╭─────────────────────────────────────────────────────────────────────────\n";
+        ret += "│STR││╭───┬─────────────────╮╭───────────────────────╮╭───────────────────────╮\n";
+        ret += "│"+sSTR+"│││   │   Inspiration   ││  ╭───╮  ╭────╮  ╭───╮ ││╭─────────────────────╮│\n";
+        ret += "├───┤│╰───┴─────────────────╯│  │   │  │    │  │   │ │││                     ││\n";
+        ret += "│"+sSTRMod+"││                       │  ├───┤  ├────┤  ├───┤ │││                     ││\n";
+        ret += "╰───╯│╭───┬─────────────────╮│  │ AC│  │Init│  │SPD│ │││                     ││\n";
+        ret += "     ││   │   Proficiency   ││  ╰───╯  ╰────╯  ╰───╯ │││                     ││\n";
+        ret += "╭───╮│╰───┴─────────────────╯│                       │││                     ││\n";
+        ret += "│DEX││                       │  ╭──────────────────╮ │││  Personality Traits ││\n";
+        ret += "│"+sDEX+"││╭─┬───┬───────────────╮│  │                  │ ││├─────────────────────┤│\n";
+        ret += "├───┤││ │   │      STR      ││  │                  │ │││                     ││\n";
+        ret += "│"+sDEXMod+"│││ │   │      DEX      ││  │     Curr. HP     │ │││                     ││\n";
+        ret += "╰───╯││ │   │      CON      ││  ├──────────────────┤ │││        Ideals       ││\n";
+        ret += "     ││ │   │      INT      ││  │                  │ ││├─────────────────────┤│\n";
+        ret += "╭───╮││ │   │      WIS      ││  │     Temp. HP     │ │││                     ││\n";
+        ret += "│CON│││ │   │      CHA      ││  ╰──────────────────╯ │││                     ││\n";
+        ret += "│"+sCON+"││├─┴───┴───────────────┤│                       │││        Bonds        ││\n";
+        ret += "├───┤││    Saving throws    ││ ╭────────╮ ╭────────╮ ││├─────────────────────┤│\n";
+        ret += "│"+sCONMod+"││╰─────────────────────╯│ │        │ │S O-O-O │ │││                     ││\n";
+        ret += "╰───╯│                       │ ├────────┤ │F O-O-O │ │││                     ││\n";
+        ret += "     │╭─┬───┬───────────────╮│ │Hit Dice│ │ Saves  │ │││        Flaws        ││\n";
+        ret += "╭───╮││ │"+sACR+"│Acrobatics     ││ ╰────────╯ ╰────────╯ ││╰─────────────────────╯│\n";
+        ret += "│INT│││ │"+sANM+"│Animal Handling│╰───────────────────────╯╰───────────────────────╯\n";
+        ret += "│"+sINT+"│││ │"+sARC+"│Arcana         │╭────────┬─────┬────────╮╭───────────────────────╮\n";
+        ret += "├───┤││ │"+sATH+"│Athletics      ││Name    │ ATK │DMG Type││                       │\n";
+        ret += "│"+sINTMod+"│││ │"+sDEC+"│Deception      ││        │     │        ││                       │\n";
+        ret += "╰───╯││ │"+sHIS+"│History        ││        │     │        ││                       │\n";
+        ret += "     ││ │"+sINS+"│Insight        ││        │     │        ││                       │\n";
+        ret += "╭───╮││ │"+sITM+"│Intimidation   │├────────┴─────┴────────┤│                       │\n";
+        ret += "│WIS│││ │"+sINV+"│Investigation  ││                       ││                       │\n";
+        ret += "│"+sWIS+"│││ │"+sWISMod+"│Medicine       ││                       ││                       │\n";
+        ret += "├───┤││ │"+sNAT+"│Nature         ││                       ││                       │\n";
+        ret += "│"+sWISMod+"│││ │"+sPRC+"│Perception     ││                       ││                       │\n";
+        ret += "╰───╯││ │"+sPRF+"│Performance    ││                       ││                       │\n";
+        ret += "     ││ │"+sPRS+"│Persuassion    ││                       ││                       │\n";
+        ret += "╭───╮││ │"+sREL+"│Religion       ││                       ││                       │\n";
+        ret += "│CHA│││ │"+sSLE+"│Sleight of Hand││                       ││                       │\n";
+        ret += "│"+sCHA+"│││ │"+sSTL+"│Stealth        ││                       ││                       │\n";
+        ret += "├───┤││ │"+sSUR+"│Survival       ││                       ││                       │\n";
+        ret += "│"+sCHAMod+"││├─┴───┴───────────────┤├───────────────────────┤│                       │\n";
+        ret += "╰───╯││       Skills        ││  Attacks and Spells   ││                       │\n";
+        ret += "─────╯╰─────────────────────╯╰───────────────────────╯│                       │\n";
+        ret += "╭───┬───────────────────────╮╭──┬────┬───────────────╮│                       │\n";
+        ret += "│   │     Passive Wisdom    ││CP│    │               ││                       │\n";
+        ret += "╰───┴───────────────────────╯│SP│    │               ││                       │\n";
+        ret += "╭───────────────────────────╮│EP│    │               ││                       │\n";
+        ret += "│                           ││GP│    │               ││                       │\n";
+        ret += "│                           ││PP│    │               ││                       │\n";
+        ret += "│                           │├──┴────╯               ││                       │\n";
+        ret += "│                           ││                       ││                       │\n";
+        ret += "│                           ││                       ││                       │\n";
+        ret += "│                           ││                       ││                       │\n";
+        ret += "│                           ││                       ││                       │\n";
+        ret += "├───────────────────────────┤├───────────────────────┤├───────────────────────┤\n";
+        ret += "│    Other Proficiencies    ││       Equipment       ││  Features and Traits  │\n";
+        ret += "╰───────────────────────────╯╰───────────────────────╯╰───────────────────────╯\n";
 
 
         return ret;
     }
+    /* }}}1 */
 
     int gen_stat() {
-        /* 
-         * TODO accept different types of stat generation
-         * i.e 4d4+4 or 4d6h3+2
-         */
+        /* TODO accept different types of stat generation */
 
         Die d6(6);
 
@@ -347,4 +345,5 @@ namespace ORPG {
 
         return ret;
     }
+
 }
