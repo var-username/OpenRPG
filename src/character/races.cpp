@@ -23,6 +23,12 @@ using namespace ORPG;
  */
 
 namespace ORPG {
+    /** TODO(var-username) For all races, automatically
+      * split name string at commas or spaces to apply both first
+      * and last names
+      */
+
+    // Human Race (SRD V5.1 pg 5)
     const string Human::race = "Human";
 
     Human::Human(Ability ab, string name) {
@@ -65,6 +71,7 @@ namespace ORPG {
         Character::Initialize();
     }
 
+    // Dwarf Race (SRD V5.1 pg 3)
     const string Dwarf::race = "Dwarf";
 
     Dwarf::Dwarf(Ability ab, string name) {
@@ -96,7 +103,6 @@ namespace ORPG {
         max_exp = levels[level - 1];    // experience needed for next level
 
         // Race specific features
-        // SRD V5.1 pg 3
         vision.type = DarkVision;
         vision.radius = 60;
         size = Medium;
@@ -107,7 +113,8 @@ namespace ORPG {
         Character::Initialize();
     }
 
-    // TODO Hill Dwarves get +1 hp max for each level (SRD V5.1 pg 4)
+    // Hill Dwarf Sub Race (SRD V5.1 pg 4)
+    // TODO Hill Dwarves get +1 hp max for each level (Race Feature: Dwarven Toughness, SRD V5.1 pg 4)
     HillDwarf::HillDwarf(Ability ab, string name) {
         abils.STR = ab.STR;     // Strength
         abils.DEX = ab.DEX;     // Dexterity
@@ -121,6 +128,7 @@ namespace ORPG {
         Initialize();
     }
 
+    // Elf Race (SRD V5.1 pg 4)
     const string Elf::race = "Elf";
 
     Elf::Elf(Ability ab, string name) {
@@ -153,7 +161,6 @@ namespace ORPG {
         max_exp = levels[level - 1];    // experience needed for next level
 
         // Race specific features
-        // SRD V5.1 pg 4
         size = Medium;
         //speed = 30;
         vision.type = DarkVision;
@@ -165,6 +172,7 @@ namespace ORPG {
         Character::Initialize();
     }
 
+    // High Elf Subrace (SRD V5.1 pg 4)
     HighElf::HighElf(Ability ab, string name) {
         abils.STR = ab.STR;     // Strength
         abils.DEX = ab.DEX + 2; // Dexterity
@@ -179,6 +187,11 @@ namespace ORPG {
     }
 
     // Halfling Race (SRD V5.1 pg 4)
+    /** NOTE(var-username): The L is capitalized in HalfLing because
+      * apparently if it were named Halfling (lower case L), it would
+      * conflict with the Language Halfling in CharacterFactory.
+      * If possible, it would be nice to fix this.
+      */
     const string HalfLing::race = "Halfling";
 
     HalfLing::HalfLing(Ability ab, string name) {
@@ -211,7 +224,6 @@ namespace ORPG {
         max_exp = levels[level - 1];    // experience needed for next level
 
         // Race specific features
-        // SRD V5.1 pg 4
         size = Small;
         //speed = 25;
         languages.push_back(Common);
@@ -234,12 +246,232 @@ namespace ORPG {
         Initialize();
     }
 
-    // TODO Dragonborn Race (SRD V5.1 pg 5)
-    // TODO Gnome Race (SRD V5.1 pg 6)
-    // TODO Rock Gnome Subrace (SRD V5.1 pg 6)
-    // TODO Half-Elf Race (SRD V5.1 pg 6)
-    // TODO Half-Orc Race (SRD V5.1 pg 7)
-    // TODO Tiefling Race (SRD V5.1 pg 7)
+    // Dragonborn Race (SRD V5.1 pg 5)
+    const string Dragonborn::race = "Dragonborn";
+
+    Dragonborn::Dragonborn(Ability ab, string name) {
+        abils.STR = ab.STR + 2; // Strength
+        abils.DEX = ab.DEX;     // Dexterity
+        abils.CON = ab.CON;     // Constitution
+        abils.INT = ab.INT;     // Intelligence
+        abils.WIS = ab.WIS;     // Wisdom
+        abils.CHA = ab.CHA + 1;     // Charisma
+
+        firstName = name;
+
+        Initialize();
+    }
+
+    void Dragonborn::Initialize() {
+        NameGenerator ng(race);
+
+        if(firstName.empty())
+            firstName = ng.make_first();
+        lastName = ng.make_last();
+        
+        // Standard character initialization
+        curr_hp = 10;                   // TODO current hit points
+        temp_hp = 0;                    // TODO temporary hit points
+        max_hp = curr_hp;               // TODO maximum hit points
+        prof = 2;                       // proficiency bonus
+        level = 1;                      // character level total
+        cur_exp = 0;                    // current experience
+        max_exp = levels[level - 1];    // experience needed for next level
+
+        // Race specific features
+        size = Medium;
+        //speed = 30;
+        languages.push_back(Common);
+        languages.push_back(Draconic);
+
+        Character::Initialize();
+    }
+
+    // Gnome Race (SRD V5.1 pg 6)
+    const string Gnome::race = "Gnome";
+    Gnome::Gnome(Ability ab, string name) {
+        abils.STR = ab.STR;     // Strength
+        abils.DEX = ab.DEX;     // Dexterity
+        abils.CON = ab.CON;     // Constitution
+        abils.INT = ab.INT + 2; // Intelligence
+        abils.WIS = ab.WIS;     // Wisdom
+        abils.CHA = ab.CHA;     // Charisma
+
+        firstName = name;
+
+        Initialize();
+    }
+
+    void Gnome::Initialize() {
+        NameGenerator ng(race);
+
+        if(firstName.empty())
+            firstName = ng.make_first();
+        lastName = ng.make_last();
+        
+        // Standard character initialization
+        curr_hp = 10;                   // TODO current hit points
+        temp_hp = 0;                    // TODO temporary hit points
+        max_hp = curr_hp;               // TODO maximum hit points
+        prof = 2;                       // proficiency bonus
+        level = 1;                      // character level total
+        cur_exp = 0;                    // current experience
+        max_exp = levels[level - 1];    // experience needed for next level
+
+        // Race specific features
+        size = Small;
+        //speed = 25;
+        vision.type = DarkVision;
+        vision.radius = 60;
+        languages.push_back(Common);
+        languages.push_back(Gnomish);
+
+        Character::Initialize();
+    }
+
+    // Rock Gnome Subrace (SRD V5.1 pg 6)
+    RockGnome::RockGnome(Ability ab, string name) {
+        abils.STR = ab.STR;     // Strength
+        abils.DEX = ab.DEX;     // Dexterity
+        abils.CON = ab.CON + 1; // Constitution
+        abils.INT = ab.INT + 2; // Intelligence
+        abils.WIS = ab.WIS;     // Wisdom
+        abils.CHA = ab.CHA;     // Charisma
+
+        firstName = name;
+
+        Initialize();
+    }
+
+    // Half-Elf Race (SRD V5.1 pg 6)
+    const string HalfElf::race = "Half-Elf";
+    
+    HalfElf::HalfElf(Ability ab, string name) {
+        abils.STR = ab.STR;     // Strength
+        abils.DEX = ab.DEX;     // Dexterity
+        abils.CON = ab.CON;     // Constitution
+        abils.INT = ab.INT;     // Intelligence
+        abils.WIS = ab.WIS;     // Wisdom
+        abils.CHA = ab.CHA + 2; // Charisma
+
+        firstName = name;
+        
+        Initialize();
+    }
+
+    void HalfElf::Initialize() {
+        NameGenerator ng(race);
+
+        if(firstName.empty())
+            firstName = ng.make_first();
+        lastName = ng.make_last();
+        
+        // Standard character initialization
+        curr_hp = 10;                   // TODO current hit points
+        temp_hp = 0;                    // TODO temporary hit points
+        max_hp = curr_hp;               // TODO maximum hit points
+        prof = 2;                       // proficiency bonus
+        level = 1;                      // character level total
+        cur_exp = 0;                    // current experience
+        max_exp = levels[level - 1];    // experience needed for next level
+
+        // Race specific features
+        size = Medium;
+        //speed = 30;
+        vision.type = DarkVision;
+        vision.radius = 60;
+        languages.push_back(Common);
+        languages.push_back(Elvish);
+
+        Character::Initialize();
+    }
+
+    // Half-Orc Race (SRD V5.1 pg 7)
+    const string HalfOrc::race = "Half-Orc";
+
+    HalfOrc::HalfOrc(Ability ab, string name) {
+        abils.STR = ab.STR + 2; // Strength
+        abils.DEX = ab.DEX;     // Dexterity
+        abils.CON = ab.CON + 1; // Constitution
+        abils.INT = ab.INT;     // Intelligence
+        abils.WIS = ab.WIS;     // Wisdom
+        abils.CHA = ab.CHA;     // Charisma
+
+        firstName = name;
+        
+        Initialize();
+    }
+
+    void HalfOrc::Initialize() {
+        NameGenerator ng(race);
+
+        if(firstName.empty())
+            firstName = ng.make_first();
+        lastName = ng.make_last();
+        
+        // Standard character initialization
+        curr_hp = 10;                   // TODO current hit points
+        temp_hp = 0;                    // TODO temporary hit points
+        max_hp = curr_hp;               // TODO maximum hit points
+        prof = 2;                       // proficiency bonus
+        level = 1;                      // character level total
+        cur_exp = 0;                    // current experience
+        max_exp = levels[level - 1];    // experience needed for next level
+
+        // Race specific features
+        size = Medium;
+        //speed = 30;
+        vision.type = DarkVision;
+        vision.radius = 60;
+        skills.get(ITM)->setProfBonus(1);
+        languages.push_back(Common);
+        languages.push_back(Orc);
+
+        Character::Initialize();
+    }
+
+    // Tiefling Race (SRD V5.1 pg 7)
+    const string Tiefling::race = "Tiefling";
+
+    Tiefling::Tiefling(Ability ab, string name) {
+        abils.STR = ab.STR;     // Strength
+        abils.DEX = ab.DEX;     // Dexterity
+        abils.CON = ab.CON;     // Constitution
+        abils.INT = ab.INT + 1; // Intelligence
+        abils.WIS = ab.WIS;     // Wisdom
+        abils.CHA = ab.CHA + 2; // Charisma
+
+        firstName = name;
+        
+        Initialize();
+    }
+
+    void Tiefling::Initialize() {
+        NameGenerator ng(race);
+
+        if(firstName.empty())
+            firstName = ng.make_first();
+        lastName = ng.make_last();
+        
+        // Standard character initialization
+        curr_hp = 10;                   // TODO current hit points
+        temp_hp = 0;                    // TODO temporary hit points
+        max_hp = curr_hp;               // TODO maximum hit points
+        prof = 2;                       // proficiency bonus
+        level = 1;                      // character level total
+        cur_exp = 0;                    // current experience
+        max_exp = levels[level - 1];    // experience needed for next level
+
+        // Race specific features
+        size = Medium;
+        //speed = 30;
+        vision.type = DarkVision;
+        vision.radius = 60;
+        languages.push_back(Common);
+        languages.push_back(Infernal);
+
+        Character::Initialize();
+    }
 
     // TODO Find cleaner way to do this factory, things get entered in too many places!!!
     CharacterFactory::CharacterFactory() {
@@ -257,6 +489,17 @@ namespace ORPG {
         race_node* halfling = allocate_node(HalfLing::ID, true, head);
         race_node* lightfoot = allocate_node(Lightfoot::ID, true, halfling);
 
+        race_node* dragonborn = allocate_node(Dragonborn::ID, true, head);
+        
+        race_node* gnome = allocate_node(Gnome::ID, true, head);
+        race_node* rockgnome = allocate_node(RockGnome::ID, true, gnome);
+
+        race_node* halfelf = allocate_node(HalfElf::ID, true, head);
+
+        race_node* halforc = allocate_node(HalfOrc::ID, true, head);
+
+        race_node* tiefling = allocate_node(Tiefling::ID, true, head);
+
         dwarf->children = {
             hillDwarf
         };
@@ -269,11 +512,20 @@ namespace ORPG {
             lightfoot
         };
 
+        gnome->children = {
+            rockgnome
+        };
+
         head->children = {
             human,
             dwarf,
             elf,
-            halfling
+            halfling,
+            dragonborn,
+            gnome,
+            halfelf,
+            halforc,
+            tiefling
         };
 
         current = head;
@@ -335,6 +587,30 @@ namespace ORPG {
             return new Lightfoot(ab, name);
         } break;
 
+        case Dragonborn::ID : {
+            return new Dragonborn(ab, name);
+        } break;
+
+        case Gnome::ID : {
+            return new Gnome(ab, name);
+        } break;
+
+        case RockGnome::ID : {
+            return new RockGnome(ab, name);
+        } break;
+
+        case HalfElf::ID : {
+            return new HalfElf(ab, name);
+        } break;
+
+        case HalfOrc::ID : {
+            return new HalfOrc(ab, name);
+        } break;
+
+        case Tiefling::ID : {
+            return new Tiefling(ab, name);
+        } break;
+
         default: {
             return NULL;
         }
@@ -374,6 +650,30 @@ namespace ORPG {
 
             case Lightfoot::ID : {
                 ret.push_back("Lightfoot");
+            } break;
+
+            case Dragonborn::ID : {
+                ret.push_back("Dragonborn");
+            } break;
+
+            case Gnome::ID : {
+                ret.push_back("Gnome");
+            } break;
+
+            case RockGnome::ID : {
+                ret.push_back("Rock Gnome");
+            } break;
+
+            case HalfElf::ID : {
+                ret.push_back("Half-Elf");
+            } break;
+
+            case HalfOrc::ID : {
+                ret.push_back("Half-Orc");
+            } break;
+
+            case Tiefling::ID : {
+                ret.push_back("Tiefling");
             } break;
             }
         }

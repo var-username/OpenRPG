@@ -86,6 +86,68 @@ namespace ORPG {
         static const int ID = 0x0031;
     };
 
+    class Dragonborn : public Character {
+    protected:
+        void Initialize();
+    
+    public:
+        Dragonborn(Ability ab = ability_struct(), string name = "");
+
+        static const int ID = 0x0040;
+        static const std::string race;
+    };
+
+    class Gnome : public Character {
+    protected:
+        void Initialize();
+    
+    public:
+        Gnome(Ability ab = ability_struct(), string name = "");
+        
+        static const int ID = 0x0050;
+        static const std::string race;
+    };
+
+    class RockGnome : public Gnome {
+    public:
+        RockGnome(Ability ab = ability_struct(), string name = "");
+
+        static const int ID = 0x0051;
+    };
+
+    class HalfElf : public Character {
+    protected:
+        void Initialize();
+    
+    public:
+        HalfElf(Ability ab = ability_struct(), string name = "");
+
+        static const int ID = 0x0060;
+        static const std::string race;
+    };
+
+    class HalfOrc : public Character {
+    protected:
+        void Initialize();
+    
+    public:
+        HalfOrc(Ability ab = ability_struct(), string name = "");
+
+        static const int ID = 0x0070;
+        static const std::string race;
+    };
+
+    class Tiefling : public Character {
+    protected:
+        void Initialize();
+    
+    public:
+        Tiefling(Ability ab = ability_struct(), string name = "");
+
+        static const int ID = 0x0080;
+        static const std::string race;
+    };
+
     class CharacterFactory {
     private:
         struct race_node {
