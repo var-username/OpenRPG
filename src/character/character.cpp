@@ -307,7 +307,6 @@ namespace ORPG {
 
         return ret;
     }
-    /* }}}1 */
 
     int gen_stat() {
         /* TODO accept different types of stat generation */

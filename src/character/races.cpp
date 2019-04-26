@@ -46,6 +46,8 @@ namespace ORPG {
             firstName = ng.make_first();
         lastName = ng.make_last();
 
+
+        // Standard character initialization
         curr_hp = 10;                   // TODO current hit points
         temp_hp = 0;                    // TODO temporary hit points
         max_hp = curr_hp;               // TODO maximum hit points
@@ -53,6 +55,12 @@ namespace ORPG {
         level = 1;                      // character level total
         cur_exp = 0;                    // current experience
         max_exp = levels[level - 1];    // experience needed for next level
+
+        // Race specific features
+        // SRD V5.1 pg 5
+        size = Medium;
+        // speed = 30;
+        languages.push_back(Common);
 
         Character::Initialize();
     }
@@ -67,7 +75,6 @@ namespace ORPG {
         abils.WIS = ab.WIS;     // Wisdom
         abils.CHA = ab.CHA;     // Charisma
 
-
         Initialize();
     }
 
@@ -79,6 +86,7 @@ namespace ORPG {
             firstName = ng.make_first();
         lastName = ng.make_last();
 
+        // Standard character initialization
         curr_hp = 10;                   // TODO current hit points
         temp_hp = 0;                    // TODO temporary hit points
         max_hp = curr_hp;               // TODO maximum hit points
@@ -86,10 +94,20 @@ namespace ORPG {
         level = 1;                      // character level total
         cur_exp = 0;                    // current experience
         max_exp = levels[level - 1];    // experience needed for next level
-        
+
+        // Race specific features
+        // SRD V5.1 pg 3
+        vision.type = DarkVision;
+        vision.radius = 60;
+        size = Medium;
+        //speed = 25;
+        languages.push_back(Common);
+        languages.push_back(Dwarvish);
+
         Character::Initialize();
     }
 
+    // TODO Hill Dwarves get +1 hp max for each level (SRD V5.1 pg 4)
     HillDwarf::HillDwarf(Ability ab, string name) {
         abils.STR = ab.STR;     // Strength
         abils.DEX = ab.DEX;     // Dexterity
@@ -124,7 +142,8 @@ namespace ORPG {
         if(firstName.empty())
             firstName = ng.make_first();
         lastName = ng.make_last();
-
+        
+        // Standard character initialization
         curr_hp = 10;                   // TODO current hit points
         temp_hp = 0;                    // TODO temporary hit points
         max_hp = curr_hp;               // TODO maximum hit points
@@ -132,6 +151,16 @@ namespace ORPG {
         level = 1;                      // character level total
         cur_exp = 0;                    // current experience
         max_exp = levels[level - 1];    // experience needed for next level
+
+        // Race specific features
+        // SRD V5.1 pg 4
+        size = Medium;
+        //speed = 30;
+        vision.type = DarkVision;
+        vision.radius = 60;
+        skills.get(PRC)->setProfBonus(1);
+        languages.push_back(Common);
+        languages.push_back(Elvish);
 
         Character::Initialize();
     }
@@ -149,6 +178,69 @@ namespace ORPG {
         Initialize();
     }
 
+    // Halfling Race (SRD V5.1 pg 4)
+    const string HalfLing::race = "Halfling";
+
+    HalfLing::HalfLing(Ability ab, string name) {
+        abils.STR = ab.STR;     // Strength
+        abils.DEX = ab.DEX + 2; // Dexterity
+        abils.CON = ab.CON;     // Constitution
+        abils.INT = ab.INT;     // Intelligence
+        abils.WIS = ab.WIS;     // Wisdom
+        abils.CHA = ab.CHA;     // Charisma
+
+        firstName = name;
+
+        Initialize();
+    }
+
+    void HalfLing::Initialize() {
+        NameGenerator ng(race);
+
+        if(firstName.empty())
+            firstName = ng.make_first();
+        lastName = ng.make_last();
+        
+        // Standard character initialization
+        curr_hp = 10;                   // TODO current hit points
+        temp_hp = 0;                    // TODO temporary hit points
+        max_hp = curr_hp;               // TODO maximum hit points
+        prof = 2;                       // proficiency bonus
+        level = 1;                      // character level total
+        cur_exp = 0;                    // current experience
+        max_exp = levels[level - 1];    // experience needed for next level
+
+        // Race specific features
+        // SRD V5.1 pg 4
+        size = Small;
+        //speed = 25;
+        languages.push_back(Common);
+        languages.push_back(Language::Halfling);
+
+        Character::Initialize();
+    }
+
+    // Lightfoot Subrace (SRD V5.1 pg 5)
+    Lightfoot::Lightfoot(Ability ab, string name) {
+        abils.STR = ab.STR;     // Strength
+        abils.DEX = ab.DEX + 2; // Dexterity
+        abils.CON = ab.CON;     // Constitution
+        abils.INT = ab.INT;     // Intelligence
+        abils.WIS = ab.WIS;     // Wisdom
+        abils.CHA = ab.CHA + 1;     // Charisma
+
+        firstName = name;
+
+        Initialize();
+    }
+
+    // TODO Dragonborn Race (SRD V5.1 pg 5)
+    // TODO Gnome Race (SRD V5.1 pg 6)
+    // TODO Rock Gnome Subrace (SRD V5.1 pg 6)
+    // TODO Half-Elf Race (SRD V5.1 pg 6)
+    // TODO Half-Orc Race (SRD V5.1 pg 7)
+    // TODO Tiefling Race (SRD V5.1 pg 7)
+
     // TODO Find cleaner way to do this factory, things get entered in too many places!!!
     CharacterFactory::CharacterFactory() {
         // TODO populate race tree here and remove the above race vector
@@ -157,13 +249,14 @@ namespace ORPG {
         race_node* human = allocate_node(Human::ID, true, head);
         
         race_node* dwarf = allocate_node(Dwarf::ID, true, head);
-    
         race_node* hillDwarf = allocate_node(HillDwarf::ID, true, dwarf);
         
         race_node* elf = allocate_node(Elf::ID, true, head);
-    
         race_node* highElf = allocate_node(HighElf::ID, true, elf);
         
+        race_node* halfling = allocate_node(HalfLing::ID, true, head);
+        race_node* lightfoot = allocate_node(Lightfoot::ID, true, halfling);
+
         dwarf->children = {
             hillDwarf
         };
@@ -172,10 +265,15 @@ namespace ORPG {
             highElf
         };
         
+        halfling->children = {
+            lightfoot
+        };
+
         head->children = {
             human,
             dwarf,
-            elf
+            elf,
+            halfling
         };
 
         current = head;
@@ -229,6 +327,14 @@ namespace ORPG {
             return new HighElf(ab, name);
         } break;
 
+        case HalfLing::ID : {
+            return new HalfLing(ab, name);
+        } break;
+
+        case Lightfoot::ID : {
+            return new Lightfoot(ab, name);
+        } break;
+
         default: {
             return NULL;
         }
@@ -237,7 +343,9 @@ namespace ORPG {
 
     vector<string> CharacterFactory::current_options() {
         vector<string> ret;
-
+        
+        // TODO Maybe we can make this more automatic?
+        // We already have race names in strings, could we use those?
         for(race_node* node : current->children) {
             switch(node->raceID) {
             case Human::ID : {
@@ -258,8 +366,15 @@ namespace ORPG {
         
             case HighElf::ID : {
                 ret.push_back("High Elf");
-                break;
-            }
+            } break;
+
+            case HalfLing::ID : {
+                ret.push_back("Halfling");
+            } break;
+
+            case Lightfoot::ID : {
+                ret.push_back("Lightfoot");
+            } break;
             }
         }
         

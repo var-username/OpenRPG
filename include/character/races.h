@@ -68,6 +68,24 @@ namespace ORPG {
         static const int ID = 0x0021;
     };
 
+    class HalfLing : public Character {
+    protected:
+        void Initialize();
+
+    public:
+        HalfLing(Ability ab = ability_struct(), string name = "");
+
+        static const int ID = 0x0030;
+        static const std::string race;    
+    };
+
+    class Lightfoot : public HalfLing {
+    public: 
+        Lightfoot(Ability ab = ability_struct(), string name = "");
+        
+        static const int ID = 0x0031;
+    };
+
     class CharacterFactory {
     private:
         struct race_node {
