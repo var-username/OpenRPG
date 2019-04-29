@@ -1,5 +1,5 @@
 /*
-character-generator - race.cpp
+characters - race.cpp
 Created on: Apr 29, 2017
 
 OpenRPG Software License - Version 1.0 - February 10th, 2017 <https://www.openrpg.io/about/license/>
@@ -16,689 +16,148 @@ There is NO WARRANTY, to the extent permitted by law.
 using namespace std;
 using namespace ORPG;
 
-/*
+/**
+ * Races currently assume 5e. What can we do to abstract outside of
+ * that space?
+ * 
  * TODO(incomingstick): based on how much copy pasting I did, it is clear that
  * setting the name could get ugly quick if we don't turn as much of it into
  * functions.
  */
 
 namespace ORPG {
-    /** TODO(var-username) For all races, automatically
-      * split name string at commas or spaces to apply both first
-      * and last names
-      */
+    const string Race::race = "Undefined Race";
 
-    // Human Race (SRD V5.1 pg 5)
+    Race::Race() {
+        Initialize();
+    }
+
+    void Race::Initialize() {
+
+    }
+
+    /* The const string representation for a Human */
     const string Human::race = "Human";
 
-    Human::Human(Ability ab, string name) {
-        abils.STR = ab.STR + 1;    // Strength
-        abils.DEX = ab.DEX + 1;    // Dexterity
-        abils.CON = ab.CON + 1;    // Constitution
-        abils.INT = ab.INT + 1;    // Intelligence
-        abils.WIS = ab.WIS + 1;    // Wisdom
-        abils.CHA = ab.CHA + 1;    // Charisma
-
-        // TODO parse and set the name here, generating any missing pieces
-
-        firstName = name;
-
-        Initialize();
+    /**
+     * @desc Constructor for a Human that is passed no arguments. A base Human
+     * has +1 to all stats. Human::Initialize() is called at the end of the
+     * constructor.
+     */
+    Human::Human() {
+        abilBonus.setScore(STR, 1);    // Strength
+        abilBonus.setScore(DEX, 1);    // Dexterity
+        abilBonus.setScore(CON, 1);    // Constitution
+        abilBonus.setScore(INT, 1);    // Intelligence
+        abilBonus.setScore(WIS, 1);    // Wisdom
+        abilBonus.setScore(CHA, 1);    // Charisma
     }
 
+    /**
+     * @desc Initialization for a Human that is passed no arguments. 
+     * Currently there is no additonal intialization that is done.
+     * 
+     * NOTE(incomingstick): Here we should finish setting up our race,
+     * by doing everything that ALL Races of type Human should do.
+     */
     void Human::Initialize() {
-        NameGenerator ng(race);
-        if (firstName.empty())
-            firstName = ng.make_first();
-        lastName = ng.make_last();
+        // TODO
 
-
-        // Standard character initialization
-        curr_hp = 10;                   // TODO current hit points
-        temp_hp = 0;                    // TODO temporary hit points
-        max_hp = curr_hp;               // TODO maximum hit points
-        prof = 2;                       // proficiency bonus
-        level = 1;                      // character level total
-        cur_exp = 0;                    // current experience
-        max_exp = levels[level - 1];    // experience needed for next level
-
-        // Race specific features
-        // SRD V5.1 pg 5
-        size = Medium;
-        // speed = 30;
-        languages.push_back(Common);
-
-        Character::Initialize();
+        Super::Initialize();
     }
 
-    // Dwarf Race (SRD V5.1 pg 3)
+    /* The const string representation for a Dwarf */
     const string Dwarf::race = "Dwarf";
 
-    Dwarf::Dwarf(Ability ab, string name) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX;     // Dexterity
-        abils.CON = ab.CON + 2; // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
+    /**
+     * @desc Constructor for a Dwarf that is passed no arguments. A base Dwarf
+     * has +2 to CON. Dwarf::Initialize() is called at the end of the
+     * constructor.
+     */
+    Dwarf::Dwarf() {
+        abilBonus.setScore(STR, 0);     // Strength
+        abilBonus.setScore(DEX, 0);     // Dexterity
+        abilBonus.setScore(CON, 2);     // Constitution
+        abilBonus.setScore(INT, 0);     // Intelligence
+        abilBonus.setScore(WIS, 0);     // Wisdom
+        abilBonus.setScore(CHA, 0);     // Charisma
 
         Initialize();
     }
 
+    /**
+     * @desc Initialization for a Dwarf that is passed no arguments. 
+     * Currently there is no additional initialization that is done.
+     * 
+     * NOTE(incomingstick): Here we should finish setting up our race,
+     * by doing everything that ALL Races of type Dwarf should do.
+     */
     void Dwarf::Initialize() {
-        // TODO parse and set the name here, generating any missing pieces
-        NameGenerator ng(race);
+        // TODO
 
-        if(firstName.empty())
-            firstName = ng.make_first();
-        lastName = ng.make_last();
-
-        // Standard character initialization
-        curr_hp = 10;                   // TODO current hit points
-        temp_hp = 0;                    // TODO temporary hit points
-        max_hp = curr_hp;               // TODO maximum hit points
-        prof = 2;                       // proficiency bonus
-        level = 1;                      // character level total
-        cur_exp = 0;                    // current experience
-        max_exp = levels[level - 1];    // experience needed for next level
-
-        // Race specific features
-        vision.type = DarkVision;
-        vision.radius = 60;
-        size = Medium;
-        //speed = 25;
-        languages.push_back(Common);
-        languages.push_back(Dwarvish);
-
-        Character::Initialize();
+        Super::Initialize();
     }
 
-    // Hill Dwarf Sub Race (SRD V5.1 pg 4)
-    // TODO Hill Dwarves get +1 hp max for each level (Race Feature: Dwarven Toughness, SRD V5.1 pg 4)
-    HillDwarf::HillDwarf(Ability ab, string name) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX;     // Dexterity
-        abils.CON = ab.CON + 2; // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS + 1; // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
+    /* The const string representation for a HillDwarf */
+    const string HillDwarf::race = "Hill Dwarf";
 
-        firstName = name;
+    /**
+     * @desc Constructor for a HillDwarf that is passed no arguments. A base
+     * HillDwarf has +2 to CON and +1 to WIS. HillDwarf::Initialize() is
+     * called at the end of the constructor.
+     */
+    HillDwarf::HillDwarf() {
+        abilBonus.setScore(STR, 0);     // Strength
+        abilBonus.setScore(DEX, 0);     // Dexterity
+        abilBonus.setScore(CON, 2);     // Constitution
+        abilBonus.setScore(INT, 0);     // Intelligence
+        abilBonus.setScore(WIS, 1);     // Wisdom
+        abilBonus.setScore(CHA, 0);     // Charisma
 
         Initialize();
     }
 
     // Elf Race (SRD V5.1 pg 4)
+    
+    /* The const string representation for an Elf */
     const string Elf::race = "Elf";
 
-    Elf::Elf(Ability ab, string name) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX + 2; // Dexterity
-        abils.CON = ab.CON;     // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
+    /**
+     * @desc Constructor for an Elf that is passed no arguments. A base Elf
+     * has +2 to DEX. Elf::Initialize() is called at the end of the
+     * constructor.
+     */
+    Elf::Elf() {
+        abilBonus.setScore(STR, 0);      // Strength
+        abilBonus.setScore(DEX, 2);      // Dexterity
+        abilBonus.setScore(CON, 0);      // Constitution
+        abilBonus.setScore(INT, 0);      // Intelligence
+        abilBonus.setScore(WIS, 0);      // Wisdom
+        abilBonus.setScore(CHA, 0);      // Charisma
 
-        firstName = name;
-        
         Initialize();
     }
 
     void Elf::Initialize() {
-        NameGenerator ng(race);
+        // TODO
+        //size = medium
+        //60ft darkvision
+        //perception proficiency
+        //languages: common and elvish
 
-        if(firstName.empty())
-            firstName = ng.make_first();
-        lastName = ng.make_last();
-        
-        // Standard character initialization
-        curr_hp = 10;                   // TODO current hit points
-        temp_hp = 0;                    // TODO temporary hit points
-        max_hp = curr_hp;               // TODO maximum hit points
-        prof = 2;                       // proficiency bonus
-        level = 1;                      // character level total
-        cur_exp = 0;                    // current experience
-        max_exp = levels[level - 1];    // experience needed for next level
-
-        // Race specific features
-        size = Medium;
-        //speed = 30;
-        vision.type = DarkVision;
-        vision.radius = 60;
-        skills.get(PRC)->setProfBonus(1);
-        languages.push_back(Common);
-        languages.push_back(Elvish);
-
-        Character::Initialize();
+        Super::Initialize();
     }
 
-    // High Elf Subrace (SRD V5.1 pg 4)
-    HighElf::HighElf(Ability ab, string name) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX + 2; // Dexterity
-        abils.CON = ab.CON;     // Constitution
-        abils.INT = ab.INT + 1; // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
+    const string HighElf::race = "High Elf";
 
-        firstName = name;
+    HighElf::HighElf() {
+        abilBonus.setScore(STR, 0);      // Strength
+        abilBonus.setScore(DEX, 2);      // Dexterity
+        abilBonus.setScore(CON, 0);      // Constitution
+        abilBonus.setScore(INT, 1);      // Intelligence
+        abilBonus.setScore(WIS, 0);      // Wisdom
+        abilBonus.setScore(CHA, 0);      // Charisma
 
         Initialize();
-    }
-
-    // Halfling Race (SRD V5.1 pg 4)
-    /** NOTE(var-username): The L is capitalized in HalfLing because
-      * apparently if it were named Halfling (lower case L), it would
-      * conflict with the Language Halfling in CharacterFactory.
-      * If possible, it would be nice to fix this.
-      */
-    const string HalfLing::race = "Halfling";
-
-    HalfLing::HalfLing(Ability ab, string name) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX + 2; // Dexterity
-        abils.CON = ab.CON;     // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
-
-        firstName = name;
-
-        Initialize();
-    }
-
-    void HalfLing::Initialize() {
-        NameGenerator ng(race);
-
-        if(firstName.empty())
-            firstName = ng.make_first();
-        lastName = ng.make_last();
-        
-        // Standard character initialization
-        curr_hp = 10;                   // TODO current hit points
-        temp_hp = 0;                    // TODO temporary hit points
-        max_hp = curr_hp;               // TODO maximum hit points
-        prof = 2;                       // proficiency bonus
-        level = 1;                      // character level total
-        cur_exp = 0;                    // current experience
-        max_exp = levels[level - 1];    // experience needed for next level
-
-        // Race specific features
-        size = Small;
-        //speed = 25;
-        languages.push_back(Common);
-        languages.push_back(Language::Halfling);
-
-        Character::Initialize();
-    }
-
-    // Lightfoot Subrace (SRD V5.1 pg 5)
-    Lightfoot::Lightfoot(Ability ab, string name) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX + 2; // Dexterity
-        abils.CON = ab.CON;     // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA + 1;     // Charisma
-
-        firstName = name;
-
-        Initialize();
-    }
-
-    // Dragonborn Race (SRD V5.1 pg 5)
-    const string Dragonborn::race = "Dragonborn";
-
-    Dragonborn::Dragonborn(Ability ab, string name) {
-        abils.STR = ab.STR + 2; // Strength
-        abils.DEX = ab.DEX;     // Dexterity
-        abils.CON = ab.CON;     // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA + 1;     // Charisma
-
-        firstName = name;
-
-        Initialize();
-    }
-
-    void Dragonborn::Initialize() {
-        NameGenerator ng(race);
-
-        if(firstName.empty())
-            firstName = ng.make_first();
-        lastName = ng.make_last();
-        
-        // Standard character initialization
-        curr_hp = 10;                   // TODO current hit points
-        temp_hp = 0;                    // TODO temporary hit points
-        max_hp = curr_hp;               // TODO maximum hit points
-        prof = 2;                       // proficiency bonus
-        level = 1;                      // character level total
-        cur_exp = 0;                    // current experience
-        max_exp = levels[level - 1];    // experience needed for next level
-
-        // Race specific features
-        size = Medium;
-        //speed = 30;
-        languages.push_back(Common);
-        languages.push_back(Draconic);
-
-        Character::Initialize();
-    }
-
-    // Gnome Race (SRD V5.1 pg 6)
-    const string Gnome::race = "Gnome";
-    Gnome::Gnome(Ability ab, string name) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX;     // Dexterity
-        abils.CON = ab.CON;     // Constitution
-        abils.INT = ab.INT + 2; // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
-
-        firstName = name;
-
-        Initialize();
-    }
-
-    void Gnome::Initialize() {
-        NameGenerator ng(race);
-
-        if(firstName.empty())
-            firstName = ng.make_first();
-        lastName = ng.make_last();
-        
-        // Standard character initialization
-        curr_hp = 10;                   // TODO current hit points
-        temp_hp = 0;                    // TODO temporary hit points
-        max_hp = curr_hp;               // TODO maximum hit points
-        prof = 2;                       // proficiency bonus
-        level = 1;                      // character level total
-        cur_exp = 0;                    // current experience
-        max_exp = levels[level - 1];    // experience needed for next level
-
-        // Race specific features
-        size = Small;
-        //speed = 25;
-        vision.type = DarkVision;
-        vision.radius = 60;
-        languages.push_back(Common);
-        languages.push_back(Gnomish);
-
-        Character::Initialize();
-    }
-
-    // Rock Gnome Subrace (SRD V5.1 pg 6)
-    RockGnome::RockGnome(Ability ab, string name) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX;     // Dexterity
-        abils.CON = ab.CON + 1; // Constitution
-        abils.INT = ab.INT + 2; // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
-
-        firstName = name;
-
-        Initialize();
-    }
-
-    // Half-Elf Race (SRD V5.1 pg 6)
-    const string HalfElf::race = "Half-Elf";
-    
-    HalfElf::HalfElf(Ability ab, string name) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX;     // Dexterity
-        abils.CON = ab.CON;     // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA + 2; // Charisma
-
-        firstName = name;
-        
-        Initialize();
-    }
-
-    void HalfElf::Initialize() {
-        NameGenerator ng(race);
-
-        if(firstName.empty())
-            firstName = ng.make_first();
-        lastName = ng.make_last();
-        
-        // Standard character initialization
-        curr_hp = 10;                   // TODO current hit points
-        temp_hp = 0;                    // TODO temporary hit points
-        max_hp = curr_hp;               // TODO maximum hit points
-        prof = 2;                       // proficiency bonus
-        level = 1;                      // character level total
-        cur_exp = 0;                    // current experience
-        max_exp = levels[level - 1];    // experience needed for next level
-
-        // Race specific features
-        size = Medium;
-        //speed = 30;
-        vision.type = DarkVision;
-        vision.radius = 60;
-        languages.push_back(Common);
-        languages.push_back(Elvish);
-
-        Character::Initialize();
-    }
-
-    // Half-Orc Race (SRD V5.1 pg 7)
-    const string HalfOrc::race = "Half-Orc";
-
-    HalfOrc::HalfOrc(Ability ab, string name) {
-        abils.STR = ab.STR + 2; // Strength
-        abils.DEX = ab.DEX;     // Dexterity
-        abils.CON = ab.CON + 1; // Constitution
-        abils.INT = ab.INT;     // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA;     // Charisma
-
-        firstName = name;
-        
-        Initialize();
-    }
-
-    void HalfOrc::Initialize() {
-        NameGenerator ng(race);
-
-        if(firstName.empty())
-            firstName = ng.make_first();
-        lastName = ng.make_last();
-        
-        // Standard character initialization
-        curr_hp = 10;                   // TODO current hit points
-        temp_hp = 0;                    // TODO temporary hit points
-        max_hp = curr_hp;               // TODO maximum hit points
-        prof = 2;                       // proficiency bonus
-        level = 1;                      // character level total
-        cur_exp = 0;                    // current experience
-        max_exp = levels[level - 1];    // experience needed for next level
-
-        // Race specific features
-        size = Medium;
-        //speed = 30;
-        vision.type = DarkVision;
-        vision.radius = 60;
-        skills.get(ITM)->setProfBonus(1);
-        languages.push_back(Common);
-        languages.push_back(Orc);
-
-        Character::Initialize();
-    }
-
-    // Tiefling Race (SRD V5.1 pg 7)
-    const string Tiefling::race = "Tiefling";
-
-    Tiefling::Tiefling(Ability ab, string name) {
-        abils.STR = ab.STR;     // Strength
-        abils.DEX = ab.DEX;     // Dexterity
-        abils.CON = ab.CON;     // Constitution
-        abils.INT = ab.INT + 1; // Intelligence
-        abils.WIS = ab.WIS;     // Wisdom
-        abils.CHA = ab.CHA + 2; // Charisma
-
-        firstName = name;
-        
-        Initialize();
-    }
-
-    void Tiefling::Initialize() {
-        NameGenerator ng(race);
-
-        if(firstName.empty())
-            firstName = ng.make_first();
-        lastName = ng.make_last();
-        
-        // Standard character initialization
-        curr_hp = 10;                   // TODO current hit points
-        temp_hp = 0;                    // TODO temporary hit points
-        max_hp = curr_hp;               // TODO maximum hit points
-        prof = 2;                       // proficiency bonus
-        level = 1;                      // character level total
-        cur_exp = 0;                    // current experience
-        max_exp = levels[level - 1];    // experience needed for next level
-
-        // Race specific features
-        size = Medium;
-        //speed = 30;
-        vision.type = DarkVision;
-        vision.radius = 60;
-        languages.push_back(Common);
-        languages.push_back(Infernal);
-
-        Character::Initialize();
-    }
-
-    // TODO Find cleaner way to do this factory, things get entered in too many places!!!
-    CharacterFactory::CharacterFactory() {
-        // TODO populate race tree here and remove the above race vector
-        head = allocate_node(Character::ID, false, NULL);
-        
-        race_node* human = allocate_node(Human::ID, true, head);
-        
-        race_node* dwarf = allocate_node(Dwarf::ID, true, head);
-        race_node* hillDwarf = allocate_node(HillDwarf::ID, true, dwarf);
-        
-        race_node* elf = allocate_node(Elf::ID, true, head);
-        race_node* highElf = allocate_node(HighElf::ID, true, elf);
-        
-        race_node* halfling = allocate_node(HalfLing::ID, true, head);
-        race_node* lightfoot = allocate_node(Lightfoot::ID, true, halfling);
-
-        race_node* dragonborn = allocate_node(Dragonborn::ID, true, head);
-        
-        race_node* gnome = allocate_node(Gnome::ID, true, head);
-        race_node* rockgnome = allocate_node(RockGnome::ID, true, gnome);
-
-        race_node* halfelf = allocate_node(HalfElf::ID, true, head);
-
-        race_node* halforc = allocate_node(HalfOrc::ID, true, head);
-
-        race_node* tiefling = allocate_node(Tiefling::ID, true, head);
-
-        dwarf->children = {
-            hillDwarf
-        };
-
-        elf->children = {
-            highElf
-        };
-        
-        halfling->children = {
-            lightfoot
-        };
-
-        gnome->children = {
-            rockgnome
-        };
-
-        head->children = {
-            human,
-            dwarf,
-            elf,
-            halfling,
-            dragonborn,
-            gnome,
-            halfelf,
-            halforc,
-            tiefling
-        };
-
-        current = head;
-    }
-
-    CharacterFactory::~CharacterFactory() {
-        //TODO clean up here
-    }
-
-    CharacterFactory::race_node* CharacterFactory::allocate_node(int raceID,
-                                                                bool required,
-                                                                race_node* parent) {
-        race_node* node = new race_node;
-            
-        if(node == NULL) {
-            printf("out of memory");
-            exit(EXIT_FAILURE);
-        }
-        
-        node->raceID = raceID;
-        node->required = required;
-        node->parent = parent;
-
-        return node;
-    }
-
-    // TODO Combine these three functions??
-
-    Character* CharacterFactory::NewCharacter(Ability ab, string name, int identifier) {
-        if (identifier == -1)
-            identifier = current->raceID;
-
-        switch(identifier) {
-        case Human::ID : {
-            return new Human(ab, name);
-        } break;
-            
-        case Dwarf::ID : {
-            return new Dwarf(ab, name);
-        } break;
-    
-        case HillDwarf::ID : {
-            return new HillDwarf(ab, name);
-        } break;
-            
-        case Elf::ID : {
-            return new Elf(ab, name);
-        } break;
-            
-        case HighElf::ID : {
-            return new HighElf(ab, name);
-        } break;
-
-        case HalfLing::ID : {
-            return new HalfLing(ab, name);
-        } break;
-
-        case Lightfoot::ID : {
-            return new Lightfoot(ab, name);
-        } break;
-
-        case Dragonborn::ID : {
-            return new Dragonborn(ab, name);
-        } break;
-
-        case Gnome::ID : {
-            return new Gnome(ab, name);
-        } break;
-
-        case RockGnome::ID : {
-            return new RockGnome(ab, name);
-        } break;
-
-        case HalfElf::ID : {
-            return new HalfElf(ab, name);
-        } break;
-
-        case HalfOrc::ID : {
-            return new HalfOrc(ab, name);
-        } break;
-
-        case Tiefling::ID : {
-            return new Tiefling(ab, name);
-        } break;
-
-        default: {
-            return NULL;
-        }
-        }
-    }
-
-    vector<string> CharacterFactory::current_options() {
-        vector<string> ret;
-        
-        // TODO Maybe we can make this more automatic?
-        // We already have race names in strings, could we use those?
-        for(race_node* node : current->children) {
-            switch(node->raceID) {
-            case Human::ID : {
-                ret.push_back("Human");
-            } break;
-
-            case Dwarf::ID : {
-                ret.push_back("Dwarf");
-            } break;
-    
-            case HillDwarf::ID : {
-                ret.push_back("Hill Dwarf");
-            } break;
-        
-            case Elf::ID : {
-                ret.push_back("Elf");  
-            } break;
-        
-            case HighElf::ID : {
-                ret.push_back("High Elf");
-            } break;
-
-            case HalfLing::ID : {
-                ret.push_back("Halfling");
-            } break;
-
-            case Lightfoot::ID : {
-                ret.push_back("Lightfoot");
-            } break;
-
-            case Dragonborn::ID : {
-                ret.push_back("Dragonborn");
-            } break;
-
-            case Gnome::ID : {
-                ret.push_back("Gnome");
-            } break;
-
-            case RockGnome::ID : {
-                ret.push_back("Rock Gnome");
-            } break;
-
-            case HalfElf::ID : {
-                ret.push_back("Half-Elf");
-            } break;
-
-            case HalfOrc::ID : {
-                ret.push_back("Half-Orc");
-            } break;
-
-            case Tiefling::ID : {
-                ret.push_back("Tiefling");
-            } break;
-            }
-        }
-        
-        return ret;
-    }
-
-    bool CharacterFactory::has_options() {
-        if(!current->children.empty())
-            return true;
-        else return false;
-    }
-
-    void CharacterFactory::select_option(int index) {
-        if(current == NULL) return;
-
-        if(index < 0 || (size_t)index > current->children.size())
-            return;
-        
-        if(current->children[index] != NULL)
-            current = current->children[index];
-    }
-
-    int CharacterFactory::current_id() {
-        if(current != NULL) return current->raceID;
-        return -1;
     }
 }

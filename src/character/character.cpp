@@ -1,5 +1,5 @@
 /*
-character-generator - character.cpp
+characters - character.cpp
 Created on: Jan 30, 2017
 
 OpenRPG Software License - Version 1.0 - February 10th, 2017 <https://www.openrpg.io/about/license/>
@@ -75,53 +75,152 @@ namespace ORPG {
         }
     }
 
-    /*
-    * mod is what is added to rolls
-    * Prof is number of proficiencies, 0 if unproficient, 1 if proficient, 2 if doubly proficient
-    * 
-    * both are chars to reduce memory usage
-    */
-    Skill::Skill(char nb, unsigned char np) {
-        this->mod = nb;
-        this->profBonus = np;
-    }
-    void Skill::set(char nb, unsigned char np) {
-        this->mod = nb;
-        this->profBonus = np;
-    }
-    void Skill::setMod(char nb) {
-        this->mod = nb;
-    }
-    void Skill::setProfBonus(unsigned char np) {
-        this->profBonus = np;
-    }
-    char Skill::getMod(void) {
-        return this->mod;
-    }
-    unsigned char Skill::getProfBonus(void) {
-        return this->profBonus;
-    }
-
-    Skills::Skills(void) {
+    /* should this be accessable to the library at large? */
+    Race* raceSelector(const int identifier = -1) {
+        // TODO document effects of leaving identifier as -1
+        switch(identifier) {
+        case Human::ID : {
+            return new Human();
+        }
+            
+        case Dwarf::ID : {
+            return new Dwarf();
+        }
         
-    }
-    Skills::~Skills(void) {
-        delete[] &skillsMap;
-    }
-    Skill* Skills::get(EnumSkill skill) {
-        return skillsMap[skill];
+        case HillDwarf::ID : {
+            return new HillDwarf();
+        }
+            
+        case Elf::ID : {
+            return new Elf();
+        }
+            
+        case HighElf::ID : {
+            return new HighElf();
+        }
+        default: {
+            return new Race();
+        }
+        }
     }
 
     Character::Character() {
-        abils.STR = 10;    // Strength
-        abils.DEX = 10;    // Dexterity
-        abils.CON = 10;    // Constitution
-        abils.INT = 10;    // Intelligence
-        abils.WIS = 10;    // Wisdom
-        abils.CHA = 10;    // Charisma
+        // NOTE(incomginstick): there are better ways to do this
+        abils.setScore(EnumAbilityScore::STR, gen_stat());    // Strength
+        abils.setScore(EnumAbilityScore::DEX, gen_stat());    // Dexterity
+        abils.setScore(EnumAbilityScore::CON, gen_stat());    // Constitution
+        abils.setScore(EnumAbilityScore::INT, gen_stat());    // Intelligence
+        abils.setScore(EnumAbilityScore::WIS, gen_stat());    // Wisdom
+        abils.setScore(EnumAbilityScore::CHA, gen_stat());    // Charisma
+
+        // TODO Gender??? What about asexual races? What if they want to enter a name?
+        NameGenerator ng;
+
+        firstName = ng.make_first();
+        lastName = ng.make_last();
+
+        // NOTE(var-username) Does this generate the name before the race?
+        race = raceSelector();
+
+        Initialize();
     }
 
-    Character::Character(Ability ab):abils(ab) {
+    Character::Character(const int raceID) {
+        // NOTE(incomginstick): there are better ways to do this
+        abils.setScore(EnumAbilityScore::STR, gen_stat());    // Strength
+        abils.setScore(EnumAbilityScore::DEX, gen_stat());    // Dexterity
+        abils.setScore(EnumAbilityScore::CON, gen_stat());    // Constitution
+        abils.setScore(EnumAbilityScore::INT, gen_stat());    // Intelligence
+        abils.setScore(EnumAbilityScore::WIS, gen_stat());    // Wisdom
+        abils.setScore(EnumAbilityScore::CHA, gen_stat());    // Charisma
+
+        // TODO Gender??? What about asexual races? What if they want to enter a name?
+        NameGenerator ng;
+
+        firstName = ng.make_first();
+        lastName = ng.make_last();
+
+        race = raceSelector(raceID);
+
+        Initialize();
+    }
+
+    Character::Character(AbilityScores ab):abils(ab) {
+        // TODO Gender??? What about asexual races? What if they want to enter a name?
+        NameGenerator ng;
+
+        firstName = ng.make_first();
+        lastName = ng.make_last();
+
+        race = raceSelector();
+
+        Initialize();
+    }
+
+    Character::Character(AbilityScores ab, const int raceID):abils(ab) {
+        // TODO Gender??? What about asexual races? What if they want to enter a name?
+        NameGenerator ng;
+
+        firstName = ng.make_first();
+        lastName = ng.make_last();
+
+        race = raceSelector(raceID);
+
+        Initialize();
+    }
+
+    Character::Character(AbilityScores ab, std::string name):abils(ab) {
+        /* TODO make this work by parsing the name into a first and last */
+        firstName = name;
+        lastName = name;
+
+        race = raceSelector();
+
+        Initialize();
+    }
+
+    Character::Character(std::string name) {
+        // NOTE(incomginstick): there are better ways to do this
+        abils.setScore(EnumAbilityScore::STR, gen_stat());    // Strength
+        abils.setScore(EnumAbilityScore::DEX, gen_stat());    // Dexterity
+        abils.setScore(EnumAbilityScore::CON, gen_stat());    // Constitution
+        abils.setScore(EnumAbilityScore::INT, gen_stat());    // Intelligence
+        abils.setScore(EnumAbilityScore::WIS, gen_stat());    // Wisdom
+        abils.setScore(EnumAbilityScore::CHA, gen_stat());    // Charisma
+
+        /* TODO make this work by parsing the name into a first and last */
+        firstName = name;
+        lastName = name;
+
+        race = raceSelector();
+
+        Initialize();
+    }
+
+    Character::Character(std::string name, const int raceID) {
+        // NOTE(incomginstick): there are better ways to do this
+        abils.setScore(EnumAbilityScore::STR, gen_stat());    // Strength
+        abils.setScore(EnumAbilityScore::DEX, gen_stat());    // Dexterity
+        abils.setScore(EnumAbilityScore::CON, gen_stat());    // Constitution
+        abils.setScore(EnumAbilityScore::INT, gen_stat());    // Intelligence
+        abils.setScore(EnumAbilityScore::WIS, gen_stat());    // Wisdom
+        abils.setScore(EnumAbilityScore::CHA, gen_stat());    // Charisma
+
+        /* TODO make this work by parsing the name into a first and last */
+        firstName = name;
+        lastName = name;
+
+        race = raceSelector(raceID);
+
+        Initialize();
+    }
+
+	Character::Character(AbilityScores ab, std::string name, const int raceID):abils(ab) {
+        /* TODO make this work by parsing the name into a first and last */
+        firstName = name;
+        lastName = name;
+
+        race = raceSelector(raceID);
     }
 
     Character::~Character() {
@@ -129,6 +228,16 @@ namespace ORPG {
     }
 
     void Character::Initialize() {
+        curr_hp = 10;                   // TODO current hit points
+        temp_hp = 0;                    // TODO temporary hit points
+        max_hp = curr_hp;               // TODO maximum hit points
+        prof = 2;                       // proficiency bonus
+        level = 1;                      // character level total
+        cur_exp = 0;                    // current experience
+        max_exp = levels[level - 1];    // experience needed for next level
+
+        // TODO Apply racial bonuses here
+
         update_skills();
     }
 
@@ -308,17 +417,9 @@ namespace ORPG {
         return ret;
     }
 
-    int gen_stat() {
-        /* TODO accept different types of stat generation */
-
-        Die d6(6);
-
-        return d6.roll() + d6.roll() + 6;
-    }
-
     /* Generates a vector of ability scores base on the used type
         TODO allow multiple types of ability score generation */
-    vector<int> ability_vector() {
+    vector<int> ability_score_vector() {
         vector<int> ret;
 
         for(int i = 0; i < 6; i++) { ret.push_back(gen_stat()); }
@@ -326,19 +427,222 @@ namespace ORPG {
         return ret;
     }
 
-    /* Generates a struct of ability scores base on the used type
-        TODO allow multiple types of ability score generation */
-    Ability ability_struct() {
-        Ability ret;
+    // TODO Find cleaner way to do this factory, things get entered in too many places!!!
+    CharacterFactory::CharacterFactory() {
+        head = allocate_node(Character::ID, false, NULL);
+        
+        race_node* human = allocate_node(Human::ID, true, head);
+        
+        race_node* dwarf = allocate_node(Dwarf::ID, true, head);
+        race_node* hillDwarf = allocate_node(HillDwarf::ID, true, dwarf);
+        
+        race_node* elf = allocate_node(Elf::ID, true, head);
+        race_node* highElf = allocate_node(HighElf::ID, true, elf);
+        
+        /*dwarf->children = {
+            hillDwarf
+        };
 
-        ret.STR = gen_stat();     // Strength
-        ret.DEX = gen_stat();     // Dexterity
-        ret.CON = gen_stat();     // Constitution
-        ret.INT = gen_stat();     // Intelligence
-        ret.WIS = gen_stat();     // Wisdom
-        ret.CHA = gen_stat();     // Charisma
+        elf->children = {
+            highElf
+        };
+        
+        head->children = {
+            human,
+            dwarf,
+            elf
+        };*/
 
+        current = head;
+    }
+
+    CharacterFactory::~CharacterFactory() {
+        //TODO clean up here
+    }
+
+    CharacterFactory::race_node* CharacterFactory::allocate_node(int raceID,
+                                                                bool required,
+                                                                race_node* parent) {
+        race_node* node = new race_node;
+            
+        if(node == NULL) {
+            printf("out of memory");
+            exit(EXIT_FAILURE);
+        }
+        
+        node->raceID = raceID;
+        node->required = required;
+        node->parent = parent;
+        
+        if (parent != NULL) {
+            parent->children.push_back(node);
+        }
+
+        return node;
+    }
+
+    // TODO Combine these three functions??
+    Character* CharacterFactory::NewCharacter(AbilityScores ab) {
+        switch(current->raceID) {
+        case Human::ID : {
+            return new Character(ab, Human::ID);
+        }
+            
+        case Dwarf::ID : {
+            return new Character(ab, Dwarf::ID);
+        }
+    
+        case HillDwarf::ID : {
+            return new Character(ab, HillDwarf::ID);
+        }
+            
+        case Elf::ID : {
+            return new Character(ab, Elf::ID);
+        }
+            
+        case HighElf::ID : {
+            return new Character(ab, HighElf::ID);
+        }
+        default: {
+            return NULL;
+        }
+        }
+    }
+
+    Character* CharacterFactory::NewCharacter(int identifier) {
+        switch(identifier) {
+        case Human::ID : {
+            return new Character(Human::ID);
+        }
+            
+        case Dwarf::ID : {
+            return new Character(Dwarf::ID);
+        }
+            
+        case HillDwarf::ID : {
+            return new Character(HillDwarf::ID);
+        }
+        
+        case Elf::ID : {
+            return new Character(Elf::ID);
+        }
+            
+        case HighElf::ID : {
+            return new Character(HighElf::ID);
+        }
+        default: {
+            return NULL;
+        }
+        }
+    }
+
+    Character* CharacterFactory::NewCharacter(int identifier, AbilityScores ab) {
+        switch(identifier) {
+        case Human::ID : {
+            return new Character(ab, Human::ID);
+        }
+            
+        case Dwarf::ID : {
+            return new Character(ab, Dwarf::ID);
+        }
+        
+        case HillDwarf::ID : {
+            return new Character(ab, HillDwarf::ID);
+        }
+            
+        case Elf::ID : {
+            return new Character(ab, Elf::ID);
+        }
+            
+        case HighElf::ID : {
+            return new Character(ab, HighElf::ID);
+        }
+        default: {
+            return NULL;
+        }
+        }
+    }
+
+    Character* CharacterFactory::NewCharacter(AbilityScores ab, string name) {
+        switch(current->raceID) {
+        case Human::ID : {
+            return new Character(ab, name, Human::ID);
+        }
+            
+        case Dwarf::ID : {
+            return new Character(ab, name, Dwarf::ID);
+        }
+    
+        case HillDwarf::ID : {
+            return new Character(ab, name, HillDwarf::ID);
+        }
+            
+        case Elf::ID : {
+            return new Character(ab, name, Elf::ID);
+        }
+            
+        case HighElf::ID : {
+            return new Character(ab, name, HighElf::ID);
+        }
+        default: {
+            return NULL;
+        }
+        }
+    }
+
+    vector<string> CharacterFactory::current_options() {
+        vector<string> ret;
+
+        for(race_node* node : current->children) {
+            switch(node->raceID) {
+            case Human::ID : {
+                ret.push_back("Human");
+                break;
+            }
+
+            case Dwarf::ID : {
+                ret.push_back("Dwarf");
+                break;
+            }
+    
+            case HillDwarf::ID : {
+                ret.push_back("Hill Dwarf");
+                break;
+            }
+        
+            case Elf::ID : {
+                ret.push_back("Elf");
+                break;
+            }
+        
+            case HighElf::ID : {
+                ret.push_back("High Elf");
+                break;
+            }
+            }
+        }
+        
         return ret;
     }
 
+    bool CharacterFactory::has_options() {
+        if(!current->children.empty())
+            return true;
+        else return false;
+    }
+
+    void CharacterFactory::select_option(int index) {
+        if(current == NULL) return;
+
+        if(index < 0 || (size_t)index > current->children.size())
+            return;
+        
+        if(current->children[index] != NULL)
+            current = current->children[index];
+    }
+
+    int CharacterFactory::current_id() {
+        if(current != NULL) return current->raceID;
+        return -1;
+    }
 }
