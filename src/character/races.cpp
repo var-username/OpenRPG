@@ -26,7 +26,6 @@ using namespace ORPG;
  */
 
 namespace ORPG {
-    const string Race::race = "Undefined Race";
 
     Race::Race() {
         Initialize();
