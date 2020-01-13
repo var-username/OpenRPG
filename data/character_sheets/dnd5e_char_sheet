@@ -1,0 +1,63 @@
+                         ╭────────────────────────────────────────────────────╮
+ ────────────────────────┤%classlevel|16% %background|15% %playername|18%│
+ \%name1|23%│Class & Level     Background      Player Name       │
+  \%name2|22%│                                                    │
+_ ───────────────────────┤%racesub|17% %alignment|15% %exp|18%│
+__\  Character Name      │Race              Alignment       Experience Points │
+                         ╰────────────────────────────────────────────────────╯
+╭───╮╭─────────────────────────────────────────────────────────────────────────
+│STR││╭───┬─────────────────╮╭───────────────────────╮
+│%strs%|3│││%inspir|5%│   Inspiration   ││  ╭───╮  ╭────╮  ╭───╮ │
+├───┤│╰───┴─────────────────╯│  │%ac|3%│  │%init|4%│  │%spd|3%│ │
+│%strm|3%││                       │  ├───┤  ├────┤  ├───┤ │
+╰───╯│╭───┬─────────────────╮│  │ AC│  │Init│  │SPD│ │
+     ││%profbonus|3%│   Proficiency   ││  ╰───╯  ╰────╯  ╰───╯ │
+╭───╮│╰───┴─────────────────╯│                       │
+│DEX││                       │  ╭──────────────────╮ │
+│%dexs|3%││╭─┬───┬───────────────╮│  │%curhp|18%│ │
+├───┤││ │%strsavb|3%│      STR      ││  │                  │ │
+│%dexm|3%│││ │%dexsavb|3%│      DEX      ││  │     Curr. HP     │ │
+╰───╯││ │%consavb|3%│      CON      ││  ├──────────────────┤ │
+     ││ │%intsavb|3%│      INT      ││  │%tmphp|18%│ │
+╭───╮││ │%wissavb|3%│      WIS      ││  │     Temp. HP     │ │
+│CON│││ │%chasavb|3%│      CHA      ││  ╰──────────────────╯ │
+│%cons|3%││├─┴───┴───────────────┤│                       │
+├───┤││    Saving throws    ││ ╭────────╮ ╭────────╮ │
+│%conm|3%││╰─────────────────────╯│ │%hitdie|8%│ │S %ssave1|1%-%ssave2|1%-%ssave3|1% │ │
+╰───╯│                       │ ├────────┤ │F %fsave1|1%-%fsave2|1%-%fsave3|1% │ │
+     │╭─┬───┬───────────────╮│ │Hit Dice│ │ Saves  │ │
+╭───╮││%acrp|1%│%acrb|3%│Acrobatics     ││ ╰────────╯ ╰────────╯ │
+│INT│││%anmp|1%│%anmb|3%│Animal Handling│╰───────────────────────╯
+│%ints|3%│││%arcp|1%│%arcb|3%│Arcana         │╭────────┬─────┬────────╮
+├───┤││%athp|1%│%athb|3%│Athletics      ││Name    │ ATK │DMG Type│
+│%intm|3%│││%decp|1%│%decb|3%│Deception      ││%atkn1|8%│%atka1|5%│%atkdmgt1|8%│
+╰───╯││%hisp|1%│%hisb|3%│History        ││%atkn2|8%│%atka2|5%│%atkdmgt2|8%│
+     ││%insp|1%│%insb|3%│Insight        ││%atkn3|8%│%atka3|5%│%atkdmgt3|8%│
+╭───╮││%itmp|1%│%itmb|3%│Intimidation   │├────────┴─────┴────────┤
+│WIS│││%invp|1%│%invb|3%│Investigation  ││%atkspell1|23%│
+│%wiss|3%│││%medp|1%│%medb|3%│Medicine       ││%atkspell2|23%│
+├───┤││%natp|1%│%natb|3%│Nature         ││%atkspell3|23%│
+│%wism|3%│││%prcp|1%│%prcb|3%│Perception     ││%atkspell4|23%│
+╰───╯││%prfp|1%│%prfb|3%│Performance    ││%atkspell5|23%│
+     ││%prsp|1%│%prsb|3%│Persuassion    ││%atkspell6|23%│
+╭───╮││%relp|1%│%relb|3%│Religion       ││%atkspell7|23%│
+│CHA│││%slep|1%│%sleb|3%│Sleight of Hand││%atkspell8|23%│
+│%chas|3%│││%stlp|1%│%stlb|3%│Stealth        ││%atkspell9|23%│
+├───┤││%surp|1%│%surb|3%│Survival       ││%atkspell10|23%│
+│%cham|3%││├─┴───┴───────────────┤├───────────────────────┤
+╰───╯││       Skills        ││  Attacks and Spells   │
+─────╯╰─────────────────────╯╰───────────────────────╯
+╭───┬───────────────────────╮╭──┬────┬───────────────╮
+│%pwis|3%│     Passive Wisdom    ││CP│%cp|4%│%equip1|15%│
+╰───┴───────────────────────╯│SP│%sp|4%│%equip2|15%│
+╭───────────────────────────╮│EP│%ep|4%│%equip3|15%│
+│%prof1|27%││GP│%gp|4%│%equip4|15%│
+│%prof2|27%││PP│%pp|4%│%equip5|15%│
+│%prof3|27%│├──┴────╯%equip6|15%│
+│%prof4|27%││%equip7|23%│
+│%prof5|27%││%equip8|23%│
+│%prof6|27%││%equip9|23%│
+│%prof7|27%││%equip10|23%│
+├───────────────────────────┤├───────────────────────┤
+│    Other Proficiencies    ││       Equipment       │
+╰───────────────────────────╯╰───────────────────────╯
