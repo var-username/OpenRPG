@@ -110,9 +110,11 @@ namespace ORPG {
         /**
          * @desc searches the following directories to find our data location, returning false if it is unable
          * to locate the data, true otherwise:
-         *      INSTALL_PREFIX,
+         *      INSTALL_PREFIX
+         *      INSTALL_PREFIX/share/
+         *      INSTALL_PREFIX/share/openrpg/
          *      INSTALL_PREFIX/usr/share/
-         *      INSTALL_PREFIX/usr/local/share
+         *      INSTALL_PREFIX/usr/local/share/
          *      fs::current_path()
          *      fs::current_path().parent_path()
          * TODO fine ways to speed this up, it is SUPER slow according to Mocha tests
@@ -122,8 +124,14 @@ namespace ORPG {
             // a list of locations to search for our data
             vector<fs::path> paths = {
                 fs::path(INSTALL_PREFIX),
-                fs::path(INSTALL_PREFIX) / fs::path("/usr/share/"),
-                fs::path(INSTALL_PREFIX) / fs::path("/usr/local/share"),
+                fs::path(INSTALL_PREFIX) / fs::path("share/"),
+                fs::path(INSTALL_PREFIX) / fs::path("share/openrpg"),
+                fs::path(INSTALL_PREFIX) / fs::path("usr/share/"),
+                fs::path(INSTALL_PREFIX) / fs::path("usr/local/share"),
+                fs::current_path() / fs::path("share/"),
+                fs::current_path() / fs::path("share/openrpg"),
+                fs::current_path().parent_path() / fs::path("share/"),
+                fs::current_path().parent_path() / fs::path("share/openrpg"),
                 fs::current_path(),
                 fs::current_path().parent_path(),
                 fs::current_path().parent_path().parent_path()
@@ -143,6 +151,9 @@ namespace ORPG {
                     // perhaps a JSON file that acts as a table of contents?
                     if(filename == "data") {
                         LOCATION = dir->path();
+                        return true;
+                    } else if(filename == "openrpg.json") {
+                        LOCATION = dir->path().parent_path();
                         return true;
                     }
                 }
